@@ -203,7 +203,7 @@ describe Aptible::CLI::Agent do
       api_args[:autoscaling] = args[:autoscaling_type]
 
       expect(sizing_policy).to receive(:update!)
-        .with(**api_args.update(service_id: service.id))
+        .with(api_args.update(service_id: service.id))
 
       subject.send('services:sizing_policy:set', 'foo')
     end
@@ -216,7 +216,7 @@ describe Aptible::CLI::Agent do
       api_args[:autoscaling] = args[:autoscaling_type]
 
       expect(service).to receive(:create_service_sizing_policy!)
-        .with(**api_args)
+        .with(api_args)
 
       subject.send('services:sizing_policy:set', 'foo')
     end
@@ -229,7 +229,7 @@ describe Aptible::CLI::Agent do
       api_args[:autoscaling] = args[:autoscaling_type]
 
       expect(service).to receive(:create_service_sizing_policy!)
-        .with(**api_args)
+        .with(api_args)
 
       subject.send('services:autoscaling_policy:set', 'foo')
     end

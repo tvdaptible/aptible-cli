@@ -1,6 +1,11 @@
 services:
   cli:
-    build: .
+    build:
+      context: .
+      args:
+        BUNDLE_GEMFILE_ARG: ${BUNDLE_GEMFILE:-Gemfile}
+        BUNDLER_VERSION_ARG: ${BUNDLER_VERSION:-1.17.3}
+        RUBY_VERSION: "${RUBY_VERSION:-2.7.8}"
     volumes:
       - type: bind
         source: .

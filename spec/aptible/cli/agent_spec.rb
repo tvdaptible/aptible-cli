@@ -252,8 +252,8 @@ describe Aptible::CLI::Agent do
 
         it 'should authenticate without otp_token_required feedback' do
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, otp_token: token,
-                  expires_in: 12.hours.seconds)
+            .with({email: email, password: password, otp_token: token,
+                   expires_in: 12.hours.seconds})
             .once
             .and_return(token)
 
@@ -279,8 +279,8 @@ describe Aptible::CLI::Agent do
             .and_raise(make_oauth2_error('otp_token_required'))
 
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, otp_token: token,
-                  expires_in: 12.hours.seconds)
+            .with({email: email, password: password, otp_token: token,
+                   expires_in: 12.hours.seconds})
             .once
             .and_return(token)
 
@@ -294,8 +294,8 @@ describe Aptible::CLI::Agent do
             .and_raise(make_oauth2_error('otp_token_required'))
 
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, otp_token: token,
-                  expires_in: 1.day.seconds)
+            .with({email: email, password: password, otp_token: token,
+                   expires_in: 1.day.seconds})
             .once
             .and_return(token)
 
@@ -305,13 +305,13 @@ describe Aptible::CLI::Agent do
 
         it 'should not retry non-OTP errors.' do
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, expires_in: 1.week.seconds)
+            .with({email: email, password: password, expires_in: 1.week.seconds})
             .once
             .and_raise(make_oauth2_error('otp_token_required'))
 
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, otp_token: token,
-                  expires_in: 12.hours.seconds)
+            .with({email: email, password: password, otp_token: token,
+                   expires_in: 12.hours.seconds})
             .once
             .and_raise(make_oauth2_error('foo'))
 
@@ -349,7 +349,7 @@ describe Aptible::CLI::Agent do
           )
 
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, expires_in: 1.week.seconds)
+            .with({email: email, password: password, expires_in: 1.week.seconds})
             .once
             .and_raise(e)
 
@@ -361,8 +361,8 @@ describe Aptible::CLI::Agent do
             .and_return(token)
 
           expect(Aptible::Auth::Token).to receive(:create)
-            .with(email: email, password: password, otp_token: token,
-                  expires_in: 12.hours.seconds)
+            .with({email: email, password: password, otp_token: token,
+                   expires_in: 12.hours.seconds})
             .once
             .and_return(token)
 

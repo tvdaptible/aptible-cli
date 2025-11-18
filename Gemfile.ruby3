@@ -18,3 +18,5 @@ end
 
 # Specify your gem's dependencies in aptible-cli.gemspec
 gemspec
+
+gem "did_you_mean", "~> 2.0"

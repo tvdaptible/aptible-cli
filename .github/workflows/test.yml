@@ -20,20 +20,40 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v4
 
+      - name: Set lockfile for Ruby version
+        id: lockfile
+        run: |
+          if [[ "${{ matrix.ruby-version }}" =~ ^3\. ]]; then
+            echo "LOCKFILE=Gemfile.lock.ruby3" >> $GITHUB_OUTPUT
+            echo "BUNDLER_VERSION=latest" >> $GITHUB_OUTPUT
+          elif [[ "${{ matrix.ruby-version }}" =~ ^2\.[0-6] ]]; then
+            echo "LOCKFILE=Gemfile.lock.ruby2" >> $GITHUB_OUTPUT
+            echo "BUNDLER_VERSION=1.17.3" >> $GITHUB_OUTPUT
+          else
+            echo "LOCKFILE=Gemfile.lock" >> $GITHUB_OUTPUT
+            echo "BUNDLER_VERSION=1.17.3" >> $GITHUB_OUTPUT
+          fi
+
       - name: Setup ruby
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby-version }}
-          bundler: 1.17.3
+          bundler: ${{ steps.lockfile.outputs.BUNDLER_VERSION }}
           bundler-cache: true
+        env:
+          BUNDLE_LOCKFILE: ${{ steps.lockfile.outputs.LOCKFILE }}
 
       - name: Test
         run: bundle exec rake
+        env:
+          BUNDLE_LOCKFILE: ${{ steps.lockfile.outputs.LOCKFILE }}
 
       - name: Sync README
         run: |
           bundle exec script/sync-readme-usage
           git diff --exit-code
+        env:
+          BUNDLE_LOCKFILE: ${{ steps.lockfile.outputs.LOCKFILE }}
 
   results:
     if: ${{ always() }}
